@@ -17,11 +17,13 @@ export const ChatTemplate = () => {
 
     setMessage((prev) => [...prev, { text: text, isGpt: false }]);
 
-    // TODO: UseCase //
+    // const { ok, content } = await CASO DE USO(text);
 
     setIsLoading(false);
 
-    // TODO: AGREGAR EL MENSAJE DE ISGPT EN TRUE //
+    // if( !ok ) return;
+
+    // setMessage((prev) => [...prev, { text: content, isGpt: true }]);
 
   }
 
@@ -40,7 +42,7 @@ export const ChatTemplate = () => {
           {
             messages.map((message, index) => (
               message.isGpt 
-              ? ( <GptMessage key={ index } text="Esto es de OpenAI" /> )
+              ? ( <GptMessage key={ index } text={ message.text } /> )
               : ( <MyMessage key={ index } text={ message.text } /> )
             ))
           }

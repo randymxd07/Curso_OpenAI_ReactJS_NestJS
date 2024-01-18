@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { GptMessage, MyMessage, TypingLoader, TextMessageBox } from "../../components";
+import { prosConsUseCase } from "../../../core/use_cases";
 
 interface Message {
   text:   string;
@@ -17,11 +18,13 @@ export const ProsConsPage = () => {
 
     setMessage((prev) => [...prev, { text: text, isGpt: false }]);
 
-    // TODO: UseCase //
+    const { ok, content } = await prosConsUseCase(text);
 
     setIsLoading(false);
 
-    // TODO: AGREGAR EL MENSAJE DE ISGPT EN TRUE //
+    if( !ok ) return;
+
+    setMessage((prev) => [...prev, { text: content, isGpt: true }]);
 
   }
 
@@ -40,7 +43,7 @@ export const ProsConsPage = () => {
           {
             messages.map((message, index) => (
               message.isGpt 
-              ? ( <GptMessage key={ index } text="Esto es de OpenAI" /> )
+              ? ( <GptMessage key={ index } text={ message.text } /> )
               : ( <MyMessage key={ index } text={ message.text } /> )
             ))
           }

@@ -1,6 +1,6 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { GptMessage, MyMessage, TypingLoader, TextMessageBox } from "../../components";
-import { prosConsStreamGeneratorUseCase } from "../../../core/use_cases";
+import { prosConsStreamUseCase } from "../../../core/use_cases";
 
 interface Message {
   text:   string;
@@ -9,44 +9,43 @@ interface Message {
 
 export const ProsConsStreamPage = () => {
 
-  const abortController = useRef( new AbortController() );
-  const isRunning = useRef(false);
-
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
-  /**------------------------
-   ** HANDLE POST FUNCTION
-   *  @param text 
-  ---------------------------*/
   const handlePost = async (text: string) => {
-
-    if( isRunning.current ) {
-      abortController.current.abort();
-      abortController.current = new AbortController();
-    }
 
     setIsLoading(true);
 
-    isRunning.current = true;
-
     setMessages((prev) => [...prev, { text: text, isGpt: false }]);
 
-    const stream = prosConsStreamGeneratorUseCase( text, abortController.current.signal );
+    const reader = await prosConsStreamUseCase(text);
 
     setIsLoading(false);
 
-    setMessages((prev) => [...prev, { text: '', isGpt: true }]);
+    if( !reader ) return alert('No se pudo generar el reader.');
+    
+    const decoder = new TextDecoder();
+    let message = '';
+    setMessages((messages) => [...messages, { text: message, isGpt: true }]);
 
-    for await (const text of stream) {
+    // eslint-disable-next-line no-constant-condition
+    while( true ) {
+
+      const { value, done } = await reader.read();
+
+      if(done) break;
+
+      const decodedChunk = decoder.decode( value, { stream: true } );
+
+      message += decodedChunk;
+
       setMessages((messages) => {
         const newMessages = [ ...messages ];
-        newMessages[ newMessages.length - 1 ].text = text;
+        newMessages[ newMessages.length - 1 ].text = message;
         return newMessages;
       })
-    }
 
-    isRunning.current = false;
+    }
 
   }
 

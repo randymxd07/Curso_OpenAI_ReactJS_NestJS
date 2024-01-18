@@ -1,6 +1,6 @@
-import { OrthographyResponse } from "../../interfaces";
+import { ProsConsResponse } from "../../interfaces";
 
-interface Respose extends OrthographyResponse {
+interface Respose extends ProsConsResponse {
     ok: boolean
 }
 
@@ -20,7 +20,7 @@ export const prosConsUseCase = async (prompt: string): Promise<Respose> => {
             throw new Error('No se pudo realizar la comparación');
         }
 
-        const data = await resp.json() as OrthographyResponse;
+        const data = await resp.json() as ProsConsResponse;
 
         return {
             ok: true,
@@ -31,9 +31,8 @@ export const prosConsUseCase = async (prompt: string): Promise<Respose> => {
         
         return {
             ok: false,
-            userScore: 0,
-            errors: [],
-            message: 'No se pudo realizar la comparación'
+            role: '',
+            content: 'No se pudo realizar la comparación',
         }
 
     }
