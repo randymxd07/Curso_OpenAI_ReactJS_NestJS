@@ -7,7 +7,7 @@ interface Options {
 export const prosConsDiscusserUseCase = async (openai: OpenAI, { prompt }: Options) => {
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         messages: [
             {
                 role: 'system',
