@@ -25,7 +25,7 @@ export const orthographyCheckUseCase = async (openai: OpenAI, options: Options) 
                 {
                     userScore: number,
                     errors: string[], // ['error -> solucion'],
-                    message: string, // Usa emogis y texto para felicitar al usuario
+                    message: string, // Usa emogis y texto para felicitar al usuario.
                 }
                 `
             },
@@ -35,9 +35,9 @@ export const orthographyCheckUseCase = async (openai: OpenAI, options: Options) 
             }
         ],
         model: "gpt-3.5-turbo",
-        // model: "gpt-3.5-turbo-1106",
         temperature: 0.3,
         max_tokens: 150,
+        // model: "gpt-3.5-turbo-1106",
         // response_format: { // ONLY WORKS WITH THE MODEL: gpt-3.5-turbo-1106 //
         //     type: 'json_object',
         // }

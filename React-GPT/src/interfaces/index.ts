@@ -1,0 +1,1 @@
+export * from './orthography_response.interface';
