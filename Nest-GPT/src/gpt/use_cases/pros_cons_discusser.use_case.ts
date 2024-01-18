@@ -7,14 +7,14 @@ interface Options {
 export const prosConsDiscusserUseCase = async (openai: OpenAI, { prompt }: Options) => {
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4',
         messages: [
             {
                 role: 'system',
                 content: `
-                Se te dará una pregunta y tu tarea es dar una respuesta con pros y contras,
-                la respuesta debe de ser en formato markdown,
-                los pros y contras deben estar en una lista,
+                    Se te dará una pregunta y tu tarea es dar una respuesta con pros y contras,
+                    la respuesta debe de ser en formato markdown,
+                    los pros y contras deben estar en una lista,
                 `
             },
             {
@@ -26,6 +26,6 @@ export const prosConsDiscusserUseCase = async (openai: OpenAI, { prompt }: Optio
         max_tokens: 500,
     });
 
-    return response.choices[0].message.content;
+    return response.choices[0].message;
 
 }
