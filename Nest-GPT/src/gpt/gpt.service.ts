@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { orthographyCheckUseCase, prosConsDiscusserStreamUseCase, prosConsDiscusserUseCase, translateUseCase } from './use_cases';
-import { OrthographyDto, ProsConsDiscusserDto, TranslateDto } from './dto';
+import * as fs from "fs";
+import * as path from "path";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { orthographyCheckUseCase, prosConsDiscusserStreamUseCase, prosConsDiscusserUseCase, textToAudioUseCase, translateUseCase } from './use_cases';
+import { OrthographyDto, ProsConsDiscusserDto, TextToAudioDto, TranslateDto } from './dto';
 import OpenAI from 'openai';
 
 @Injectable()
@@ -26,6 +28,22 @@ export class GptService {
 
     async translate({ prompt, lang }: TranslateDto) {
         return await translateUseCase(this.openai, { prompt, lang });
+    }
+    
+    async textToAudio({ prompt, voice }: TextToAudioDto) {
+        return await textToAudioUseCase(this.openai, { prompt, voice });
+    }
+
+    async getAudio( id: string ){
+
+        const filePath = path.resolve( __dirname, '../../generated/audios/', `${id}.mp3` );
+
+        const wasFound = fs.existsSync(filePath);
+
+        if( !wasFound ) throw new NotFoundException(`File ${id}.mp3 not found`);
+
+        return filePath;
+
     }
 
 }
