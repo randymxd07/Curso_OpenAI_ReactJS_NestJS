@@ -15,15 +15,16 @@ interface Props {
 export const TextMessageBoxSelect = ({ onSendMessage, placeholder, disableCorrections = false, options }: Props) => {
 
     const [message, setMessage] = useState('');
-    const [selectedOption, setSelectedOption] = useState<string>('');
+    const [selectedOption, setSelectedOption] = useState<string>('inglés'); // ENGLISH WILL BE THE DEFAULT LANGUAGE //
 
     const handleSendMessage = (event: FormEvent<HTMLFormElement>) => {
         
         event.preventDefault();
 
         if(message.trim().length === 0) return;
+        if( selectedOption === '' ) return;
 
-        onSendMessage(message);
+        onSendMessage(message, selectedOption);
 
         setMessage('');
 
