@@ -64,7 +64,7 @@ export const TranslatePage = () => {
 
       </div>
 
-      {/* CHAT MESSAGE BOX */}
+      {/* CHAT MESSAGE BOX SELECT */}
       <TextMessageBoxSelect
         options={languages}
         onSendMessage={ handlePost } 
