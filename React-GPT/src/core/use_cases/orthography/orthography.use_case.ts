@@ -1,4 +1,4 @@
-import { OrthographyResponse } from "../../interfaces";
+import { OrthographyResponse } from "../../../interfaces";
 
 interface Respose extends OrthographyResponse {
     ok: boolean

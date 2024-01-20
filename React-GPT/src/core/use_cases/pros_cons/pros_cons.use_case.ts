@@ -1,4 +1,4 @@
-import { ProsConsResponse } from "../../interfaces";
+import { ProsConsResponse } from "../../../interfaces";
 
 interface Respose extends ProsConsResponse {
     ok: boolean
