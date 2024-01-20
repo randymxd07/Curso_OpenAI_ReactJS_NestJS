@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { GptMessage, GptMessageSelectableImage, MyMessage, TextMessageBox, TypingLoader } from "../../components";
+import { GptMessage, GptMessageImage, MyMessage, TextMessageBox, TypingLoader } from "../../components";
 import { imageGenerationUseCase, imageVariationUseCase } from "../../../core/use_cases";
 
 interface Info {
@@ -52,9 +52,7 @@ export const ImageTunningPage = () => {
 
     setMessage((prev) => [...prev, { text: text, isGpt: false }]);
 
-    const { mask, original } = originalImageAndMask;
-
-    const imageInfo = await imageGenerationUseCase(text, original, mask);
+    const imageInfo = await imageGenerationUseCase(text);
 
     setIsLoading(false);
 
@@ -76,7 +74,7 @@ export const ImageTunningPage = () => {
 
             <img
               className="border rounded-xl w-36 h-36 object-contain"
-              src={ originalImageAndMask.mask ?? originalImageAndMask.original }
+              src={ originalImageAndMask.original }
               alt="Original Image"
             />
 
@@ -104,16 +102,16 @@ export const ImageTunningPage = () => {
               messages.map((message, index) => (
                 message.isGpt 
                 ? ( 
-                  <GptMessageSelectableImage
+                  <GptMessageImage 
                     key={ index } 
                     text={ message.text }
                     // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
                     imageUrl={ message.info?.imageUrl! }
                     // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
                     alt={ message.info?.alt! }
-                    onImageSelected={ maskImageUrl => setOriginalImageAndMask({
-                      original: message.info?.imageUrl,
-                      mask: maskImageUrl,
+                    onImageSelected={ url => setOriginalImageAndMask({
+                      original: url,
+                      mask: undefined
                     })}
                   />
                 )
